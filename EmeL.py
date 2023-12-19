@@ -36,20 +36,20 @@ class EmeL(nn.Module):
             self.h_count = self.h_count+1
             _batch_size = h_.shape[0]
             if self.h_var is None:
-                self.h_var = h_v * _batch_size / (_batch_size - 1)
+                self.h_var = h_v / (_batch_size - 1.) * _batch_size
                 self.h_mean = h_u
 
             elif self.h_count <= self.h_upper:
                 self.h_var = (self.h_var * (self.h_count - 1. / _batch_size) + h_v +
                               (h_u - self.h_mean) ** 2 / (1 + 1. / self.h_count)) / \
                              (self.h_count + 1 - 1. / _batch_size)
-                self.h_mean = (self.h_mean * self.h_count + h_u) / (self.h_count + 1)
+                self.h_mean = (self.h_mean * self.h_count + h_u) / (self.h_count + 1.)
 
             else:
                 self.h_var = (self.h_var * (self.h_upper - 1. / _batch_size) + h_v +
                               (h_u - self.h_mean) ** 2 / (1 + 1. / self.h_upper)) / \
                              (self.h_upper + 1 - 1. / _batch_size)
-                self.h_mean = (self.h_mean * self.h_upper + h_u) / (self.h_upper + 1)
+                self.h_mean = (self.h_mean * self.h_upper + h_u) / (self.h_upper + 1.)
                 h = self.punish_best(h)
                 # h = self.punish_best_k(h, 10)
         return h
