@@ -57,19 +57,18 @@ class EmeLMP(nn.Module):
             batch_size = h.shape[0]
             if h_count == 1:
                 self.h_mean += h_u
-                self.h_var += h_v * batch_size / (batch_size - 1)
+                self.h_var += h_v / (batch_size - 1.) * batch_size
 
             elif h_count <= self.h_upper:
-                self.h_mean += (-self.h_mean + h_u) / (h_count + 1)
-
                 self.h_var += (-self.h_var + h_v + (h_u - self.h_mean) ** 2 / (1 + 1. / h_count)) / \
                               (h_count + 1 - 1. / batch_size)
+                self.h_mean += (-self.h_mean + h_u) / (h_count + 1.)
                 # print(self.h_var[0, 0, 0])
             else:
                 self.h_var += (-self.h_var + h_v +
                                (h_u - self.h_mean) ** 2 / (1 + 1. / self.h_upper)) / \
                               (self.h_upper + 1 - 1. / batch_size)
-                self.h_mean += (-self.h_mean + h_u) / (self.h_upper + 1)
+                self.h_mean += (-self.h_mean + h_u) / (self.h_upper + 1.)
                 h = self.punish_best(h)
 
         return h
