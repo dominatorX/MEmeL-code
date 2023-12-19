@@ -22,8 +22,9 @@ class EmeL(nn.Module):
         # diff = torch.square(h - self.h_mean)
         # self.emel_loss = torch.sum(diff * update_idx) / 2
 
-        inc = self.h_mean + h.detach()
-        h = (1 - update_idx * 2) * h + inc * update_idx
+        ratio = 1.
+        inc = self.h_mean + ratio*h.detach()
+        h = (1 - update_idx * (1+ratio)) * h + inc * update_idx
 
         return h
 
@@ -65,6 +66,7 @@ class EmeL(nn.Module):
         # diff = torch.square(h - self.h_mean)
         # self.emel_loss = torch.sum(diff * update_idx) / 2
 
-        inc = self.h_mean + h.detach()
-        h = (1 - update_idx * 2) * h + inc * update_idx
+        ratio = 1.
+        inc = self.h_mean + ratio*h.detach()
+        h = (1 - update_idx * (1+ratio)) * h + inc * update_idx
         return h
