@@ -50,10 +50,10 @@ class EmeL(nn.Module):
                              (self.h_upper + 1 - 1. / _batch_size)
                 self.h_mean = (self.h_mean * self.h_upper + h_u) / (self.h_upper + 1)
                 h = self.punish_best_(h)
-                # h = self.punish_best_k(h, 100)
+                # h = self.punish_best_k(h, 10)
         return h
 
-    def punish_best_k(self, h, k=3):
+    def punish_best_k(self, h, k=10):
         shape = h.shape
         _batch_size = shape[0]
 
