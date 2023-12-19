@@ -1,6 +1,5 @@
 import torch
 from torch import nn
-from copy import deepcopy
 
 
 class EmeLMP(nn.Module):
@@ -30,31 +29,19 @@ class EmeLMP(nn.Module):
 
     def punish_best(self, h):
         shape = h.shape
-        batch_size = shape[0]
+        _batch_size = shape[0]
         h_mean = self.h_mean.to(self.device)
         h_var = self.h_var.to(self.device)
-        # diff = torch.square(h - h_mean)
-        max_in_batch, idx = torch.max(((h - h_mean).pow(2) /
-                                       (h_var + h_var.mean() / 100)).reshape((batch_size, -1)), 1)
-        # find the h with largest phi in each batch  
 
-        total_dim = h.reshape(batch_size, -1).shape[1]
-        h_idx = deepcopy(idx)
-        for i in range(batch_size):
-            h_idx[i] += i * total_dim
-        change = torch.zeros_like(h).reshape(-1)
-        change[h_idx] = 1.
+        dev = ((h.detach() - h_mean).pow(2) / (h_var + h_var / 100)).reshape((_batch_size, -1))
+        max_in_batch, _ = torch.max(dev, 1, keepdim=True)
+        update_idx = (max_in_batch == dev).reshape(shape)
 
-        # update h
-        h = h.reshape(-1)
-        h_mean = h_mean.reshape(-1)
-        inc = torch.zeros_like(h)
-        inc[h_idx] = h_mean[idx] + h.detach()[h_idx]
-        h = (1 - change * 2) * h + inc
-        h = h.reshape(shape)
+        # diff = torch.square(h - self.h_mean)
+        # emel_loss = torch.sum(diff * update_idx) / 2
 
-        # change = change.reshape(shape)
-        # emel_loss = torch.sum(diff * change) / 2
+        inc = h_mean + h.detach()
+        h = (1 - update_idx * 2) * h + inc * update_idx
 
         return h # , emel_loss
 
