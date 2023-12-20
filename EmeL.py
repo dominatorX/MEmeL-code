@@ -30,7 +30,7 @@ class EmeL(nn.Module):
 
     def forward(self, h):
         if self.training:
-            h_ = h.detach()
+            h_ = torch.tensor(h.detach(), dtype=torch.float32)
             h_u = h_.mean(dim=0, keepdim=True)
             h_v = h_.var(dim=0, keepdim=True, unbiased=False)
             self.h_count = self.h_count+1
