@@ -1,0 +1,5 @@
+We adopt the official implementation of Swin-Transformer. Please clone the repo[https://github.com/microsoft/Swin-Transformer/blob/main/get_started.md] first. Then use the files given here to cover it, which contains modification for MEmeL.
+
+Please download their pretrained models using the following links: Swin-T[https://github.com/SwinTransformer/storage/releases/download/v1.0.8/swin_tiny_patch4_window7_224_22k.pth], Swin-S[https://github.com/SwinTransformer/storage/releases/download/v1.0.8/swin_small_patch4_window7_224_22k.pth], Swin-B[https://github.com/SwinTransformer/storage/releases/download/v1.0.0/swin_base_patch4_window7_224_22k.pth] and download ImageNet benchmark.
+
+The evaluation is the same as the repo[https://github.com/dhlee347/pytorchic-bert?tab=readme-ov-file#example-usage], where finetune can enable MEmeL with configs "--emel". Please refer to the script "finetune.sh" as example.
