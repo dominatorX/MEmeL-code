@@ -33,7 +33,7 @@ class EmeL(nn.Module):
         return h
 
     def forward(self, h):
-        if True:# self.training:
+        if self.training:
             h_ = torch.tensor(h.detach(), dtype=torch.float32)
             h_u = h_.mean(dim=0, keepdim=True)
             h_v = h_.var(dim=0, keepdim=True, unbiased=False)
