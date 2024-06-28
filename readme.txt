@@ -1,5 +1,5 @@
 Code for paper "Learning from Emergence: A Study on Proactively Inhibiting the
-Monosemantic Neurons of Artificial Neural Networks"
+Monosemantic Neurons of Artificial Neural Networks" KDD 2024. [Access](https://arxiv.org/pdf/2312.11560)
 
 The core module "EmeL.py" is located in the home directory. To use it, simply insert it after any layer(s) of a network.
 
